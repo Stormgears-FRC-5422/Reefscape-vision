@@ -495,7 +495,10 @@ class MainWindow(QMainWindow):
         suggested_name = os.path.join(folder, f"{name}_processed{extension}")
         save_path, _ = QFileDialog.getSaveFileName(self, 'Save Image',
                                                    suggested_name, "")
-
+        if save_path == suggested_name:
+            pass
+        else:
+            save_path += extension
         cv2.imwrite(save_path, cv2.cvtColor(self.masked_image_rgb, cv2.COLOR_RGB2BGR))
 
 
