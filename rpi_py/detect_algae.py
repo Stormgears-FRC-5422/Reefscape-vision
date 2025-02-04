@@ -4,8 +4,8 @@ from numpy import copy, array, uint8, ones, zeros, uint16, around, pi
 import random as rng
 import matplotlib.pyplot as plt
 
-from plot_image import plot_img
-import globals
+from explore.plot_image import plot_img, disp_value
+from explore import globals
 
 
 def filter_algae2(image):
