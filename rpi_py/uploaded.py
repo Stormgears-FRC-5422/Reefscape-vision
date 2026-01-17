@@ -1,8 +1,7 @@
 import time
 import os
 import sys
-from multiprocessing import Array, freeze_support, Process, Lock, \
-    freeze_support, Queue, Process
+from multiprocessing import Array, freeze_support, Process, Lock, Queue
 import random
 import json
 
