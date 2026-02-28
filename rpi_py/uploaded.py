@@ -61,28 +61,6 @@ if sys.platform.startswith('linux'):
         IMAGE_PATH = create_sequential_dir(os.path.join(dest_folder, "FRC_field"))
         LOG_PATH = create_sequential_dir(os.path.join(dest_folder, "logs"))
 
-def camera_switcher(camera_queue, arr_from_main_arr):
-    """Switch between dict_cameras every 5 seconds and update the shared queue."""
-    cam_index = arr_from_main_arr[1]
-    last_cam_index = cam_index
-    while True:
-        cam_index = arr_from_main_arr[1]
-        # print(f"cam_index = {cam_index}")
-        # if cam_index == last_cam_index:
-        #     pass
-        # else:
-        #     print(f"Camera changed. cam_index is {cam_index}.")
-        #     last_cam_index = cam_index
-        camera_queue.put(cam_index)  # Push new camera index to queue
-        # #
-        # #
-        # # time.sleep(5)  # Switch interval
-        # current_cam = camera_queue.get()  # Get current camera
-        # new_cam = 1 if current_cam == 0 else 0  # Toggle between cam 0 and cam 1
-        # camera_queue.put(new_cam)  # Push new camera index to queue
-        time.sleep(0.1)
-
-
 def video_processor(camera_queue, output_queue):
     """Process video frames and add effects before sending to the output queue."""
     CameraServer.enableLogging()
@@ -91,18 +69,15 @@ def video_processor(camera_queue, output_queue):
 
     # Create two USB dict_cameras
     for camera_path, camera_name in dict_cameras.items():
-        if camera_name[:12].lower() == 'global shutt':
-            cam2 = UsbCamera(name=camera_name[:12], path=camera_path)
-        else:
-            cam1 = UsbCamera(name=camera_name[:12], path=camera_path)
+        cam1 = UsbCamera(name=camera_name[:12], path=camera_path)
 
     # Set resolution
     cam1.setResolution(RAW_IMG_WIDTH, RAW_IMG_HEIGHT)
-    cam2.setResolution(RAW_IMG_WIDTH, RAW_IMG_HEIGHT)
+    
 
     # Create CvSink objects to grab frames
     sink1 = CameraServer.getVideo(camera=cam1)
-    sink2 = CameraServer.getVideo(camera=cam2)
+    
 
     # Create CvSource to send processed frames
     # output = CameraServer.putVideo("ProcessedVideo", RAW_IMG_WIDTH, RAW_IMG_HEIGHT)
@@ -124,7 +99,7 @@ def video_processor(camera_queue, output_queue):
         # camera_queue.put(current_cam)  # Put it back to maintain state
 
         # Select the appropriate camera sink
-        current_sink = sink1 if current_cam == 0 else sink2
+        current_sink = sink1 
         time.sleep(0.01)  # ~100 FPS
 
         # Capture frame
