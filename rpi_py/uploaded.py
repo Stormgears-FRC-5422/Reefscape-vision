@@ -152,15 +152,11 @@ output_queue = Queue()
 
 arr_from_main_arr = Array('i', [0, 0])
 
-# Create processes
-switcher_process = Process(target=camera_switcher, args=(camera_queue,
-                                                         arr_from_main_arr))
 processor_process = Process(target=video_processor,
                                args=(camera_queue, output_queue))
 output_process = Process(target=output_stream, args=(output_queue,))
 
 # Start processes
-switcher_process.start()
 processor_process.start()
 output_process.start()
 
